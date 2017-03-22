@@ -51,7 +51,16 @@ module VCAP::CloudController
     end
 
     def tcp?
-      self.router_group_guid.present?
+      if router_group_type.eql?('tcp')
+        return true
+      elsif !router_group_type.nil?
+        return false
+      elsif router_group_guid.present?
+        router_group_type = routing_api_client.router_group(router_group_guid).type
+        return true if router_group_type.eql?('tcp')
+      end
+
+      false
     end
 
     def addable_to_organization!(organization)
@@ -59,6 +68,12 @@ module VCAP::CloudController
 
     def transient_attrs
       router_group_type.blank? ? [] : [:router_group_type]
+    end
+
+    private
+
+    def routing_api_client
+      @routing_api_client ||= CloudController::DependencyLocator.instance.routing_api_client
     end
   end
 end
