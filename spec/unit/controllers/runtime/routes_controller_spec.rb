@@ -591,7 +591,7 @@ module VCAP::CloudController
             post '/v2/routes', MultiJson.dump(req)
 
             expect(last_response).to have_status_code(403)
-            expect(last_response.body).to include 'Support for TCP routing is disabled'
+            expect(last_response.body).to include 'Routing API is disabled'
           end
         end
 
@@ -710,7 +710,7 @@ module VCAP::CloudController
                 post '/v2/routes?generate_port=true', MultiJson.dump(req), headers_for(user)
 
                 expect(last_response).to have_status_code(403)
-                expect(last_response.body).to include 'Support for TCP routing is disabled'
+                expect(last_response.body).to include 'Routing API is disabled'
               end
             end
 
